@@ -99,7 +99,7 @@
 import { ref } from 'vue';
 import { QrcodeStream } from 'vue3-qrcode-reader';
 import { GoogleMap, Marker, Polyline } from 'vue3-google-map';
-
+import { useQuasar } from 'quasar';
 // Google Map Data
 const center = { lat: 28.6128, lng: 77.2295 };  // Center of the map (New Delhi Railway Station)
 const destination = { lat: 28.7041, lng: 77.1025 };  // Destination coordinates (West End Terminal)
@@ -139,10 +139,16 @@ function startScan() {
   showScanner.value = true;
 }
 
+const $q = useQuasar()
+
 // Action when QR code is decoded
 const onDecode = (content) => {
   showScanner.value = false;
   console.log(content);
+  $q.notify({
+    type:'positive',
+    message:'Ticket validated succesfully!'
+  })
 };
 
 // Initialization of QR scanner (if needed)
