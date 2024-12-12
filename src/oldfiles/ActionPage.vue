@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-  <q-page>
+
   <q-card class="route-card">
     <div class="route-details">
       <div class="route-header">
@@ -32,7 +32,7 @@
       flat
     />
   </q-card>
-  </q-page>
+
 </q-page-container>
 </template>
 

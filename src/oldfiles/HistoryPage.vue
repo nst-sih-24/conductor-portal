@@ -1,4 +1,4 @@
-History
+
 <template>
     <q-page-container>
       <q-page class="page-background q-px-sm q-pt-xl q-pb-lg">
@@ -6,7 +6,7 @@ History
           <h2>Journey History Overview</h2>
 
           <!-- Journeys List -->
-          <div class="journeys-list q-mt-lg">xx
+          <div class="journeys-list q-mt-lg">
             <div v-for="journey in journeys" :key="journey.id" class="journey-card">
               <q-card flat bordered class="full-width card-elevation q-mb-md">
                 <q-card-section>
@@ -39,19 +39,19 @@ export default {
       journeys: [
         {
           id: 1,
-          routeName: 'Central Station to West End Terminal',
+          routeName: 'IIT Delhi to Red Fort',
           date: '2024-05-10',
           duration: '4h 30m',
         },
         {
           id: 2,
-          routeName: 'East Market to North Plaza',
+          routeName: 'Delhi Gate to Shivaji Stadium',
           date: '2024-05-11',
           duration: '3h 45m',
         },
         {
           id: 3,
-          routeName: 'Main Street to City Park',
+          routeName: 'Janakpuri to LajPatNagar',
           date: '2024-05-12',
           duration: '2h 15m',
         }
