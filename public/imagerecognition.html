@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NavSmart Attendance</title>
+    <style>
+      /* General styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      h1 {
+        color: #2d89ef;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        text-align: center;
+      }
+
+      button {
+        background-color: #2d89ef;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #2267b8;
+      }
+
+      #webcam-container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      #label-container {
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      .label {
+        background: #f1f1f1;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+
+      #loader {
+        display: none;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>NavSmart Attendance System</h1>
+      <button type="button" onclick="init()" id="startbutton">Start Attendance</button>
+      <div id="loader">Loading...</div>
+      <div id="webcam-container"></div>
+      <div id="label-container"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+      const URL = 'https://teachablemachine.withgoogle.com/models/xDf7uu5ps/'
+      let model, webcam, labelContainer, maxPredictions
+
+      async function init() {
+        const startbutton = document.getElementById('startbutton')
+        const loader = document.getElementById('loader')
+        startbutton.style.display = 'none'
+        loader.style.display = 'block'
+
+        const modelURL = URL + 'model.json'
+        const metadataURL = URL + 'metadata.json'
+
+        model = await tmImage.load(modelURL, metadataURL)
+
+        loader.style.display = 'none'
+
+        maxPredictions = model.getTotalClasses()
+
+        const flip = true
+        webcam = new tmImage.Webcam(370, 370, flip)
+        await webcam.setup()
+        await webcam.play()
+        window.requestAnimationFrame(loop)
+
+        document.getElementById('webcam-container').appendChild(webcam.canvas)
+        labelContainer = document.getElementById('label-container')
+        labelContainer.innerHTML = '' // Clear existing labels
+        for (let i = 0; i < maxPredictions; i++) {
+          const labelDiv = document.createElement('div')
+          labelDiv.className = 'label'
+          labelContainer.appendChild(labelDiv)
+        }
+      }
+
+      async function loop() {
+        webcam.update()
+        await predict()
+        window.requestAnimationFrame(loop)
+      }
+
+      async function predict() {
+        const prediction = await model.predict(webcam.canvas)
+        for (let i = 0; i < maxPredictions; i++) {
+          const classPrediction =
+            prediction[i].className + ': ' + (prediction[i].probability * 100).toFixed(2) + '%'
+          labelContainer.childNodes[i].innerHTML = classPrediction
+          // change background color of the label if class prediction is higher than 70%
+          labelContainer.childNodes[i].style.backgroundColor =
+            prediction[i].probability > 0.7 ? 'lightgreen' : 'lightgrey'
+        }
+      }
+    </script>
+  </body>
+</html>
