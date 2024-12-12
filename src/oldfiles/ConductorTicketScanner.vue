@@ -63,7 +63,7 @@
             <q-timeline-entry side="left" icon="flag" color="green" class="cursor-pointer timeline-entry"
               @click="toggleStops">
               <div class="stop-name-container">
-                <div class="stop-name">West End Terminal</div>
+                <div class="stop-name">NSIT</div>
               </div>
             </q-timeline-entry>
           </q-timeline>
@@ -76,7 +76,7 @@
 
         <!-- Verify -->
 
-        <q-page-sticky position="bottom-left" :offset="[18, 18] ">
+        <q-page-sticky position="bottom-right" :offset="[18, 18] ">
           <q-btn fab icon="qr_code_scanner" color="primary" no-caps @click="startScan">
             <span class="q-mx-sm">Scan</span>
           </q-btn>
